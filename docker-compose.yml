@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  ghost:
+    image: seeruk/ghost:latest
+    environment:
+    - GHOST_DB=mysql
+    - GHOST_DB_HOST=db.docker
+    - GHOST_DB_PORT=3306
+    - GHOST_DB_USER=ghost
+    - GHOST_DB_PASS=ghost
+    - GHOST_DB_NAME=ghost
+    - GHOST_URL=http://localhost:2368
+    links:
+    - mysql:db.docker
+    ports:
+    - 2368:2368
+    volumes:
+    - ./ghost:/opt/ghost
+
+  mysql:
+    image: mysql:5.7
+    environment:
+    - MYSQL_ROOT_PASSWORD=ghost
+    - MYSQL_USER=ghost
+    - MYSQL_PASSWORD=ghost
+    - MYSQL_DATABASE=ghost
+    ports:
+    - 3316:3306
+    volumes:
+    - dbdata:/var/lib/mysql
+
+volumes:
+  dbdata:
+    driver: local

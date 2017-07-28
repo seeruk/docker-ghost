@@ -1,41 +1,34 @@
-#!/bin/bash
+#!/bin/sh
 
-SYSTEM_UID=${GHOST_UID:-"1000"}
-SYSTEM_UID_TYPE=$( [ ${GHOST_UID} ] && echo "preset" || echo "default" )
+. "$(dirname $0)/docker-functions.sh"
 
-echo "==> Updating Ghost user's ID to ${SYSTEM_UID} (${SYSTEM_UID_TYPE})"
-usermod -u ${SYSTEM_UID} ghost > /dev/null 2>&1
+set -x
 
-echo "==> Updating ownership of content directory (${GHOST_CONTENT})"
-mkdir -p "${GHOST_CONTENT}"
-chown -RH ghost "${GHOST_CONTENT}"
+# Wait for MySQL to start, if it is going to be used.
+wait_for_mysql
 
-if [[ "$*" == npm*start* ]]; then
-    echo "==> Installing Ghost data..."
+cd "$GHOST_DIR"
 
-    baseDir="$GHOST_SOURCE/content"
+GHOST_INSTALLED_VERSION=$(ghost version | grep '^Ghost Version' | grep -o '\d\.\d\.\d$')
 
-    for dir in "$baseDir"/*/ "$baseDir"/themes/*/; do
-        targetDir="$GHOST_CONTENT/${dir#$baseDir/}"
+# If Ghost is not installed...
+if [ "$GHOST_INSTALLED_VERSION" == "" ]; then
+    # Install and configure Ghost, we need to configure before we migrate.
+    ghost_install
+    ghost_config
 
-        mkdir -p "$targetDir"
+    # After installation, migrate the database (if it's not already).
+    ghost setup migrate
+# If Ghost is installed, but not the desired version...
+elif [ "$GHOST_INSTALLED_VERSION" != "$GHOST_VERSION" ]; then
+    # We're assuming you'll always use this for upgrading, and the version will always increase or
+    # stay the same, and never revert.
+    ghost_update
 
-        if [ -z "$(ls -A "$targetDir")" ]; then
-            tar -c --one-file-system -C "$dir" . | tar xC "$targetDir"
-        fi
-    done
-
-    if [ ! -e "$GHOST_CONTENT/config.js" ]; then
-        sed -r '
-            s/127\.0\.0\.1/0.0.0.0/g;
-            s!path.join\(__dirname, (.)/content!path.join(process.env.GHOST_CONTENT, \1!g;
-        ' "$GHOST_SOURCE/config.example.js" > "$GHOST_CONTENT/config.js"
-    fi
-
-    ln -sf "$GHOST_CONTENT/config.js" "$GHOST_SOURCE/config.js"
-
-    echo "==> Done!"
-    echo "==> Starting Ghost"
+    # @todo: Verify this work...
 fi
+
+# Always configure to the desired state.
+ghost_config
 
 exec "$@"
