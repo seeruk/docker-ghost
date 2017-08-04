@@ -51,11 +51,13 @@ ghost_update() {
 }
 
 ghost_perms() {
-    UID=$(stat -c "%u" "$GHOST_DIR")
-    GID=$(stat -c "%g" "$GHOST_DIR")
+    UID=${GHOST_UID:-$(stat -c "%u" "$GHOST_DIR")}
+    GID=${GHOST_GID:-$(stat -c "%g" "$GHOST_DIR")}
 
     groupmod -o -g ${GID} ghost
     usermod -o -u ${UID} -g ${GID} ghost
+
+    chown -R ${UID}:${GID} ${GHOST_DIR}
 }
 
 wait_for_mysql() {

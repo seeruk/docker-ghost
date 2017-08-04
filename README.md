@@ -21,6 +21,8 @@ You can use the following environment variables to configure the image:
 | `GHOST_URL`       | Ghost public URL.                                 | `http://localhost:2368` |
 | `GHOST_ENV`       | Ghost environment, `production` or `development`. | `production`            |
 | `GHOST_VERSION`   | Ghost version (increase this to update Ghost).    | `1.1.0`                 |
+| `GHOST_UID`       | The desired `ghost` user's UID.                   | ``                      |
+| `GHOST_GID`       | The desired `ghost` user and group's GID.         | ``                      |
 | `NODE_ENV`        | Node environment.                                 | `production`            |
 | `GHOST_DIR`       | Ghost installation directory (in container).      | `/opt/ghost`            |
 
