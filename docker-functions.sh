@@ -50,6 +50,14 @@ ghost_update() {
         --no-prompt
 }
 
+ghost_perms() {
+    UID=$(stat -c "%u" "$GHOST_DIR")
+    GID=$(stat -c "%g" "$GHOST_DIR")
+
+    groupmod -o -g ${GID} ghost
+    usermod -o -u ${UID} -g ${GID} ghost
+}
+
 wait_for_mysql() {
     if [ "$GHOST_DB" != "mysql" ]; then
         return 0

@@ -4,8 +4,7 @@
 
 cd "$GHOST_DIR"
 
-set -x
-
+echo "==> Running Ghost..."
 ghost run \
     --development="$(ghost_is_development)" \
     --no-prompt
