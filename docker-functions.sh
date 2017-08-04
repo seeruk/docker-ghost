@@ -48,6 +48,8 @@ ghost_update() {
     ghost update ${GHOST_VERSION} \
         --development=$(ghost_is_development) \
         --no-prompt
+
+    ghost stop --all --no-prompt
 }
 
 ghost_perms() {
