@@ -30,7 +30,7 @@ If you start the image up with the default configuration, or the included `docke
 
 **Permissions**
 
-This image will detect the UID and GID of the Ghost volumne (`/opt/ghost` by default), and will update the `ghost` user's UID and GID to match. <TODO>This can be overridden with the `GHOST_UID` and `GHOST_GID` environment variables.</TODO> By default, if you specify a folder on the host that doesn't exist yet in a `docker-compose.yml` file, it will be created as `root`, meaning `ghost` will be given the UID and GID `0`.
+This image will detect the UID and GID of the Ghost volumne (`/opt/ghost` by default), and will update the `ghost` user's UID and GID to match. This can be overridden with the `GHOST_UID` and `GHOST_GID` environment variables. By default, if you specify a folder on the host that doesn't exist yet in a `docker-compose.yml` file, it will be created as `root`, meaning `ghost` will be given the UID and GID `0`.
 
 If you'd like to use your own UID and GID and have them be automatically detected, you only need to ensure that the directory on your host machine that is mounted to `GHOST_DIR` (`/opt/ghost` by default) is created, and owned by you.
 
