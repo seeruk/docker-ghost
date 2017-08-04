@@ -45,11 +45,13 @@ ghost_install() {
 
 # Update Ghost to a new version. An existing installation must be present.
 ghost_update() {
+    echo "==> Updating Ghost..."
     ghost update ${GHOST_VERSION} \
         --development=$(ghost_is_development) \
         --no-prompt
 
-    ghost stop --all --no-prompt
+    echo "==> Cleaning up after update..."
+    pkill -2 ghost
 }
 
 ghost_perms() {

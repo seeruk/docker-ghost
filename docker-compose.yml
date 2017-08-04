@@ -11,7 +11,7 @@ services:
     - GHOST_DB_PASS=ghost
     - GHOST_DB_NAME=ghost
     - GHOST_URL=http://localhost:2368
-    - GHOST_VERSION=1.1.0
+    - GHOST_VERSION=1.5.0
     links:
     - mysql:db.docker
     ports:
