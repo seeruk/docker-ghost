@@ -52,6 +52,11 @@ ghost_install() {
         --process="local"
 }
 
+# Migrate the database.
+ghost_migrate() {
+    ghost setup migrate --development="$(ghost_is_development)"
+}
+
 # Start Ghost.
 ghost_start() {
     echo "==> Running Ghost..."
