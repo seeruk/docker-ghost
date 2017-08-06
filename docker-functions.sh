@@ -25,8 +25,8 @@ ghost_config() {
         --process="local" \
         --url="$GHOST_URL"
 
-    ghost config database.connection.port "${GHOST_DB_PORT}"
-    ghost config paths.contentPath "${GHOST_CONTENT}"
+    ghost config database.connection.port "${GHOST_DB_PORT}" --development="$(ghost_is_development)"
+    ghost config paths.contentPath "${GHOST_CONTENT}" --development="$(ghost_is_development)"
 }
 
 # Copy necessary files around from the base Ghost installation, so that Ghost runs properly.
@@ -40,6 +40,7 @@ ghost_copy() {
 ghost_install() {
     ghost install ${GHOST_VERSION} \
         --db="sqlite3" \
+        --development="$(ghost_is_development)" \
         --dir="$GHOST_HOME" \
         --ip="0.0.0.0" \
         --log="stdout" \
