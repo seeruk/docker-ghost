@@ -3,10 +3,11 @@ MAINTAINER Elliot Wright <hello@elliotdwright.com>
 
 # Build setup options
 ARG GHOST_UID=368
-ARG GHOST_CLI_VERSION=1.0.0
+ARG GHOST_CLI_VERSION=1.0.3
 
 # Directory options
-ENV GHOST_DIR=/opt/ghost
+ENV GHOST_CONTENT=/opt/ghost/content
+ENV GHOST_HOME=/opt/ghost/home
 
 # Startup options
 ENV GHOST_DB=mysql
@@ -24,21 +25,21 @@ COPY docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
 COPY docker-functions.sh /usr/bin/docker-functions.sh
 COPY docker-pre-start.sh /usr/bin/docker-pre-start.sh
 
-WORKDIR ${GHOST_DIR}
+WORKDIR ${GHOST_HOME}
 
 RUN set -x \
     && adduser -u ${GHOST_UID} -HD ghost \
-    # This is a little bit of a hack, but we need usermod...
     && echo http://dl-cdn.alpinelinux.org/alpine/v3.5/community/ >> /etc/apk/repositories \
     && apk add --no-cache \
         ca-certificates \
         curl \
         netcat-openbsd \
+        rsync \
         shadow \
         su-exec \
-    && mkdir -p ${GHOST_DIR} \
+    && mkdir -p ${GHOST_HOME} \
     && mkdir -p /home/ghost \
-    && chown -R ghost: ${GHOST_DIR} \
+    && chown -R ghost: ${GHOST_HOME} \
     && chown -R ghost: /home/ghost \
     && yarn global add ghost-cli@latest knex-migrator \
     && yarn cache clean \
@@ -49,7 +50,7 @@ RUN set -x \
 
 EXPOSE 2368
 
-VOLUME ${GHOST_DIR}
+VOLUME ${GHOST_HOME}
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 

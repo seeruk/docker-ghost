@@ -23,6 +23,7 @@ fi
 
 # Always configure to the desired state.
 ghost_config
+ghost_copy
 
 echo ""
 echo "==> Executing CMD"

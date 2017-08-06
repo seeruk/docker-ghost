@@ -2,9 +2,6 @@
 
 . "$(dirname $0)/docker-functions.sh"
 
-cd "$GHOST_DIR"
+cd "$GHOST_HOME"
 
-echo "==> Running Ghost..."
-ghost run \
-    --development="$(ghost_is_development)" \
-    --no-prompt
+ghost_start

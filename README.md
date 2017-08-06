@@ -24,15 +24,16 @@ You can use the following environment variables to configure the image:
 | `GHOST_UID`       | The desired `ghost` user's UID.                   |                         |
 | `GHOST_GID`       | The desired `ghost` user and group's GID.         |                         |
 | `NODE_ENV`        | Node environment.                                 | `production`            |
-| `GHOST_DIR`       | Ghost installation directory (in container).      | `/opt/ghost`            |
+| `GHOST_CONTENT`   | Ghost content directory (in container).           | `/opt/ghost/content`    |
+| `GHOST_HOME`      | Ghost installation directory (in container).      | `/opt/ghost/home`       |
 
 If you start the image up with the default configuration, or the included `docker-compose.yml` file you should be able to access an instance of Ghost running in production mode at `http://localhost:2368` (unless you're running Docker in a VM, etc.).
 
 **Permissions**
 
-This image will detect the UID and GID of the Ghost volumne (`/opt/ghost` by default), and will update the `ghost` user's UID and GID to match. This can be overridden with the `GHOST_UID` and `GHOST_GID` environment variables. By default, if you specify a folder on the host that doesn't exist yet in a `docker-compose.yml` file, it will be created as `root`, meaning `ghost` will be given the UID and GID `0`.
+This image will detect the UID and GID of the Ghost content volumne (`/opt/ghost/content` by default), and will update the `ghost` user's UID and GID to match. This can be overridden with the `GHOST_UID` and `GHOST_GID` environment variables. By default, if you specify a folder on the host that doesn't exist yet in a `docker-compose.yml` file, it will be created as `root`, meaning `ghost` will be given the UID and GID `0`.
 
-If you'd like to use your own UID and GID and have them be automatically detected, you only need to ensure that the directory on your host machine that is mounted to `GHOST_DIR` (`/opt/ghost` by default) is created, and owned by you.
+If you'd like to use your own UID and GID and have them be automatically detected, you only need to ensure that the directory on your host machine that is mounted to `GHOST_HOME` (`/opt/ghost/content` by default) is created, and owned by you.
 
 ## License
 

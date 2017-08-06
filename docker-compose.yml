@@ -17,7 +17,8 @@ services:
     ports:
     - 2368:2368
     volumes:
-    - ./ghost:/opt/ghost
+    - ./ghost/content/opt/ghost/content
+    - ./ghost/home:/opt/ghost/home
 
   mysql:
     image: mysql:5.7

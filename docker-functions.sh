@@ -26,6 +26,13 @@ ghost_config() {
         --url="$GHOST_URL"
 
     ghost config database.connection.port "${GHOST_DB_PORT}"
+    ghost config paths.contentPath "${GHOST_CONTENT}"
+}
+
+# Copy necessary files around from the base Ghost installation, so that Ghost runs properly.
+ghost_copy() {
+    echo "==> Copying basic Ghost content..."
+    rsync -al "$GHOST_HOME/content/" "$GHOST_CONTENT"
 }
 
 # Install a fresh Ghost instance. We use a local DB first to avoid the local system checks (as we
@@ -33,6 +40,7 @@ ghost_config() {
 ghost_install() {
     ghost install ${GHOST_VERSION} \
         --db="sqlite3" \
+        --dir="$GHOST_HOME" \
         --ip="0.0.0.0" \
         --log="stdout" \
         --no-enable \
@@ -41,6 +49,14 @@ ghost_install() {
         --no-stack \
         --no-start \
         --process="local"
+}
+
+# Start Ghost.
+ghost_start() {
+    echo "==> Running Ghost..."
+    ghost run \
+        --development="$(ghost_is_development)" \
+        --no-prompt
 }
 
 # Update Ghost to a new version. An existing installation must be present.
@@ -55,13 +71,15 @@ ghost_update() {
 }
 
 ghost_perms() {
-    UID=${GHOST_UID:-$(stat -c "%u" "$GHOST_DIR")}
-    GID=${GHOST_GID:-$(stat -c "%g" "$GHOST_DIR")}
+    echo "==> Updating Ghost user permissions..."
+    UID=${GHOST_UID:-$(stat -c "%u" "$GHOST_CONTENT")}
+    GID=${GHOST_GID:-$(stat -c "%g" "$GHOST_CONTENT")}
 
     groupmod -o -g ${GID} ghost
     usermod -o -u ${UID} -g ${GID} ghost
 
-    chown -R ${UID}:${GID} ${GHOST_DIR}
+    chown -R ${UID}:${GID} "$GHOST_CONTENT"
+    chown -R ${UID}:${GID} "$GHOST_HOME"
 }
 
 wait_for_mysql() {

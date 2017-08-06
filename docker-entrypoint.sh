@@ -5,7 +5,7 @@
 # Wait for MySQL to start, if it is going to be used.
 wait_for_mysql
 
-cd "$GHOST_DIR"
+cd "$GHOST_HOME"
 
 # Update permissions of `ghost` user
 ghost_perms
