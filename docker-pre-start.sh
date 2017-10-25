@@ -2,7 +2,7 @@
 
 . "$(dirname $0)/docker-functions.sh"
 
-GHOST_INSTALLED_VERSION=$(ghost version | grep '^Ghost Version' | grep -o '\d\.\d\.\d$')
+GHOST_INSTALLED_VERSION=$(ghost version | grep '^Ghost Version' | grep -o '\d\.\d*\.\d$')
 
 # If Ghost is not installed...
 if [ "$GHOST_INSTALLED_VERSION" == "" ]; then
