@@ -3,7 +3,7 @@ MAINTAINER Elliot Wright <hello@elliotdwright.com>
 
 # Build setup options
 ARG GHOST_UID=368
-ARG GHOST_CLI_VERSION=1.0.3
+ARG GHOST_CLI_VERSION=1.1.3
 
 # Directory options
 ENV GHOST_CONTENT=/opt/ghost/content
@@ -17,7 +17,7 @@ ENV GHOST_DB_PASS=ghost
 ENV GHOST_DB_NAME=ghost
 ENV GHOST_URL=http://localhost:2368
 ENV GHOST_ENV=production
-ENV GHOST_VERSION=1.5.0
+ENV GHOST_VERSION=1.15.1
 ENV NODE_ENV=production
 
 COPY docker-cmd.sh /usr/bin/docker-cmd.sh
